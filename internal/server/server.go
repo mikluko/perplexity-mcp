@@ -27,6 +27,9 @@ func NewServer(apiKey string) *Server {
 	// Register all tools
 	s.registerTools()
 
+	// Register all prompts
+	s.registerPrompts()
+
 	return s
 }
 

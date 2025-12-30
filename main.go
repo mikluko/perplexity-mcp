@@ -1,0 +1,52 @@
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/mikluko/perplexity-mcp/internal/config"
+	"github.com/mikluko/perplexity-mcp/internal/server"
+	"github.com/modelcontextprotocol/go-sdk/mcp"
+)
+
+func main() {
+	cfg, err := config.LoadConfig()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Configuration error: %v\n", err)
+		os.Exit(1)
+	}
+
+	srv := server.NewServer(cfg.APIKey)
+
+	switch cfg.Mode {
+	case "stdio":
+		runStdio(srv)
+	case "http":
+		runHTTP(srv, cfg.ListenAddr)
+	default:
+		fmt.Fprintf(os.Stderr, "Unknown mode: %s\n", cfg.Mode)
+		os.Exit(1)
+	}
+}
+
+func runStdio(srv *server.Server) {
+	transport := &mcp.StdioTransport{}
+	if err := srv.MCP().Run(context.Background(), transport); err != nil {
+		log.Fatalf("Server error: %v", err)
+	}
+}
+
+func runHTTP(srv *server.Server, addr string) {
+	handler := mcp.NewStreamableHTTPHandler(
+		func(*http.Request) *mcp.Server { return srv.MCP() },
+		nil,
+	)
+
+	log.Printf("Starting HTTP server on %s", addr)
+	if err := http.ListenAndServe(addr, handler); err != nil {
+		log.Fatalf("HTTP server error: %v", err)
+	}
+}

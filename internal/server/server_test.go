@@ -6,7 +6,7 @@ import (
 
 func TestNewServer(t *testing.T) {
 	apiKey := "test-api-key"
-	srv := NewServer(apiKey)
+	srv := NewServer("v0.0.0", apiKey)
 
 	if srv == nil {
 		t.Fatal("NewServer() returned nil")
@@ -26,7 +26,7 @@ func TestNewServer(t *testing.T) {
 }
 
 func TestServerMCP(t *testing.T) {
-	srv := NewServer("test-key")
+	srv := NewServer("v0.0.0", "test-key")
 
 	mcpServer := srv.MCP()
 	if mcpServer == nil {

@@ -12,6 +12,10 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
+var (
+	version = "0.0.0"
+)
+
 func main() {
 	cfg, err := config.LoadConfig()
 	if err != nil {
@@ -19,7 +23,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	srv := server.NewServer(cfg.APIKey)
+	srv := server.NewServer(version, cfg.APIKey)
 
 	switch cfg.Mode {
 	case "stdio":

@@ -16,10 +16,10 @@ type Server struct {
 }
 
 // NewServer creates a new MCP server with Perplexity tools.
-func NewServer(apiKey string) *Server {
+func NewServer(version, apiKey string) *Server {
 	mcpServer := mcp.NewServer(&mcp.Implementation{
 		Name:    "perplexity-mcp",
-		Version: "0.1.0",
+		Version: version,
 	}, nil)
 
 	s := &Server{mcpServer, client.NewClient(apiKey)}

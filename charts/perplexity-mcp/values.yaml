@@ -4,7 +4,7 @@ replicaCount: 1
 image:
   repository: ghcr.io/mikluko/perplexity-mcp
   pullPolicy: IfNotPresent
-  tag: ""  # Overrides the image tag (default is the chart appVersion)
+  tag: "" # Overrides the image tag (default is the chart appVersion)
 
 imagePullSecrets: []
 nameOverride: ""
@@ -12,11 +12,16 @@ fullnameOverride: ""
 
 # Perplexity API configuration
 perplexity:
-  # API key - REQUIRED
-  # Can be set via values or existingSecret
+  # API key - REQUIRED when creating managed secret
+  # Leave empty when using existingSecret
   apiKey: ""
-  # Name of existing secret containing 'api-key' field
-  existingSecret: ""
+
+  # External secret reference
+  existingSecret:
+    # Name of existing secret (leave empty to create managed secret)
+    name: ""
+    # Key within the secret (defaults to 'api-key')
+    key: "api-key"
 
 # Server mode configuration
 server:
@@ -40,7 +45,7 @@ securityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop:
-    - ALL
+      - ALL
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 65532

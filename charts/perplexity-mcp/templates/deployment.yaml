@@ -45,7 +45,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ include "perplexity-mcp.secretName" . }}
-              key: api-key
+              key: {{ include "perplexity-mcp.secretKey" . }}
         ports:
         - name: http
           containerPort: 8080

@@ -63,9 +63,20 @@ Create the name of the service account to use
 Create the name of the secret to use
 */}}
 {{- define "perplexity-mcp.secretName" -}}
-{{- if .Values.perplexity.existingSecret }}
-{{- .Values.perplexity.existingSecret }}
+{{- if .Values.perplexity.existingSecret.name }}
+{{- .Values.perplexity.existingSecret.name }}
 {{- else }}
 {{- include "perplexity-mcp.fullname" . }}
 {{- end }}
+{{- end }}
+
+{{/*
+Create the key name in the secret to use
+*/}}
+{{- define "perplexity-mcp.secretKey" -}}
+{{- if .Values.perplexity.existingSecret.name }}
+{{- .Values.perplexity.existingSecret.key | default "api-key" }}
+{{- else -}}
+api-key
+{{- end -}}
 {{- end }}

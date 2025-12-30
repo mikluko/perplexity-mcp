@@ -93,9 +93,6 @@ spec:
         - name: traefik-config
           mountPath: /etc/traefik/traefik.yaml
           subPath: traefik.yaml
-        - name: traefik-confd
-          mountPath: /etc/traefik/conf.d/dynamic.yaml
-          subPath: dynamic.yaml
         {{- if .Values.proxy.auth.enabled }}
         - name: auth-users
           mountPath: /etc/traefik/users
@@ -105,9 +102,6 @@ spec:
           {{- toYaml .Values.proxy.resources | nindent 12 }}
       volumes:
       - name: traefik-config
-        configMap:
-          name: {{ include "perplexity-mcp.fullname" . }}-traefik
-      - name: traefik-confd
         configMap:
           name: {{ include "perplexity-mcp.fullname" . }}-traefik
       {{- if .Values.proxy.auth.enabled }}

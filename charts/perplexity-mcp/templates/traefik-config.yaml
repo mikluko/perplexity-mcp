@@ -10,10 +10,6 @@ data:
       web:
         address: ":{{ .Values.proxy.port }}"
 
-    providers:
-      file:
-        filename: /etc/traefik/conf.d/dynamic.yaml
-
     log:
       level: INFO
 
@@ -23,7 +19,6 @@ data:
     ping:
       entryPoint: web
 
-  dynamic.yaml: |
     http:
       routers:
         mcp:

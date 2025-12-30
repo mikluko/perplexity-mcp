@@ -18,7 +18,6 @@ func daysAgo(days int) string {
 
 // Research prompts
 
-
 var researchPrompt = &mcp.Prompt{
 	Name:        "research",
 	Description: "Comprehensive research with current state and key developments",
@@ -242,13 +241,18 @@ var newsPrompt = &mcp.Prompt{
 	Description: "Find recent news and developments",
 	Arguments: []*mcp.PromptArgument{
 		{Name: "topic", Description: "News topic", Required: true},
+		{Name: "date", Description: "Start date (YYYY-MM-DD)", Required: false},
 	},
 }
 
 func (s *Server) handleNews(ctx context.Context, req *mcp.GetPromptRequest) (*mcp.GetPromptResult, error) {
 	topic := req.Params.Arguments["topic"]
+	date := req.Params.Arguments["date"]
+	if date == "" {
+		date = daysAgo(30)
+	}
 
-	userPrompt := fmt.Sprintf("%s significant developments", topic)
+	userPrompt := fmt.Sprintf("%s significant developments since %s", topic, date)
 
 	return &mcp.GetPromptResult{
 		Messages: []*mcp.PromptMessage{

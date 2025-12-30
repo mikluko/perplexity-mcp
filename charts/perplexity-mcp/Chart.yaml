@@ -1,0 +1,16 @@
+apiVersion: v2
+name: perplexity-mcp
+description: A Helm chart for Perplexity MCP Server
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - mcp
+  - perplexity
+  - ai
+  - llm
+home: https://github.com/mikluko/perplexity-mcp
+sources:
+  - https://github.com/mikluko/perplexity-mcp
+maintainers:
+  - name: mikluko

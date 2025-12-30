@@ -74,6 +74,8 @@ spec:
           mountPath: /etc/traefik/users
           subPath: users
           readOnly: true
+        - name: traefik-tmp
+          mountPath: /tmp
         resources:
           {{- toYaml .Values.auth.resources | nindent 12 }}
         securityContext:
@@ -91,6 +93,8 @@ spec:
       - name: auth-users
         secret:
           secretName: {{ include "perplexity-mcp.fullname" . }}-auth
+      - name: traefik-tmp
+        emptyDir: {}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

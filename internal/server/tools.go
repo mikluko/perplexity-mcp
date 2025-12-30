@@ -211,9 +211,9 @@ func (s *Server) handleReason(ctx context.Context, _ *mcp.CallToolRequest, in Re
 
 // registerTools registers all Perplexity tools with the MCP server.
 func (s *Server) registerTools() {
-	mcp.AddTool(s.mcp, askTool, s.handleAsk)
-	mcp.AddTool(s.mcp, researchStartTool, s.handleResearchStart)
-	mcp.AddTool(s.mcp, researchResultTool, s.handleResearchResult)
-	mcp.AddTool(s.mcp, researchWaitTool, s.handleResearchWait)
-	mcp.AddTool(s.mcp, reasonTool, s.handleReason)
+	mcp.AddTool(s.mcp, askTool, withLogging(s, "perplexity_ask", s.handleAsk))
+	mcp.AddTool(s.mcp, researchStartTool, withLogging(s, "perplexity_research_start", s.handleResearchStart))
+	mcp.AddTool(s.mcp, researchResultTool, withLogging(s, "perplexity_research_result", s.handleResearchResult))
+	mcp.AddTool(s.mcp, researchWaitTool, withLogging(s, "perplexity_research_wait", s.handleResearchWait))
+	mcp.AddTool(s.mcp, reasonTool, withLogging(s, "perplexity_reason", s.handleReason))
 }

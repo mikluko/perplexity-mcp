@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"time"
 )
@@ -91,16 +92,19 @@ func (c *Client) Query(ctx context.Context, model, systemPrompt, query string) (
 
 	resp, err := c.httpClient.Do(httpReq)
 	if err != nil {
+		log.Printf("Perplexity API request failed: %v", err)
 		return nil, fmt.Errorf("request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
+		log.Printf("Failed to read Perplexity API response: %v", err)
 		return nil, fmt.Errorf("failed to read response: %w", err)
 	}
 
 	if resp.StatusCode != http.StatusOK {
+		log.Printf("Perplexity API error (status %d): %s", resp.StatusCode, string(respBody))
 		return nil, fmt.Errorf("API error (status %d): %s", resp.StatusCode, string(respBody))
 	}
 
@@ -195,16 +199,19 @@ func (c *Client) StartResearch(ctx context.Context, query string) (string, error
 
 	resp, err := c.httpClient.Do(httpReq)
 	if err != nil {
+		log.Printf("Perplexity async API request failed: %v", err)
 		return "", fmt.Errorf("request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
+		log.Printf("Failed to read Perplexity async API response: %v", err)
 		return "", fmt.Errorf("failed to read response: %w", err)
 	}
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusAccepted {
+		log.Printf("Perplexity async API error (status %d): %s", resp.StatusCode, string(respBody))
 		return "", fmt.Errorf("API error (status %d): %s", resp.StatusCode, string(respBody))
 	}
 
@@ -228,16 +235,19 @@ func (c *Client) GetResearchResult(ctx context.Context, requestID string) (*Asyn
 
 	resp, err := c.httpClient.Do(httpReq)
 	if err != nil {
+		log.Printf("Perplexity async status request failed: %v", err)
 		return nil, fmt.Errorf("request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
+		log.Printf("Failed to read Perplexity async status response: %v", err)
 		return nil, fmt.Errorf("failed to read response: %w", err)
 	}
 
 	if resp.StatusCode != http.StatusOK {
+		log.Printf("Perplexity async status error (status %d): %s", resp.StatusCode, string(respBody))
 		return nil, fmt.Errorf("API error (status %d): %s", resp.StatusCode, string(respBody))
 	}
 

@@ -194,8 +194,3 @@ kubectl get secret perplexity-mcp -o jsonpath='{.data.api-key}' | base64 -d
 - [ ] Configure authentication (basic auth or OAuth)
 - [ ] Set appropriate resource limits
 - [ ] Enable autoscaling for high availability
-- [ ] Configure network policies
-- [ ] Set up monitoring and alerts
-- [ ] Use dedicated namespace
-- [ ] Configure pod security policies
-- [ ] Set up backup for secrets

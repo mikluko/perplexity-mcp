@@ -40,13 +40,21 @@ func runStdio(srv *server.Server) {
 }
 
 func runHTTP(srv *server.Server, addr string) {
-	handler := mcp.NewStreamableHTTPHandler(
+	mcpHandler := mcp.NewStreamableHTTPHandler(
 		func(*http.Request) *mcp.Server { return srv.MCP() },
 		nil,
 	)
 
+	mux := http.NewServeMux()
+	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":"ok"}`))
+	})
+	mux.Handle("/", mcpHandler)
+
 	log.Printf("Starting HTTP server on %s", addr)
-	if err := http.ListenAndServe(addr, handler); err != nil {
+	if err := http.ListenAndServe(addr, mux); err != nil {
 		log.Fatalf("HTTP server error: %v", err)
 	}
 }

@@ -7,10 +7,6 @@ metadata:
     {{- include "perplexity-mcp.labels" . | nindent 4 }}
 data:
   traefik.yaml: |
-    # Traefik static configuration
-    api:
-      dashboard: false
-
     entryPoints:
       web:
         address: ":{{ .Values.auth.port }}"
@@ -19,18 +15,10 @@ data:
       file:
         filename: /etc/traefik/conf.d/dynamic.yaml
 
-    log:
-      level: ERROR
-      format: json
-
-    accessLog:
-      format: json
-
     ping:
       entryPoint: web
 
   dynamic.yaml: |
-    # Traefik dynamic configuration
     http:
       routers:
         mcp:
@@ -43,7 +31,6 @@ data:
         basic-auth:
           basicAuth:
             usersFile: "/etc/traefik/users"
-            realm: "Perplexity MCP"
 
       services:
         mcp-backend:

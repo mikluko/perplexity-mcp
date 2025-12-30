@@ -28,6 +28,35 @@ server:
   mode: http
   listenAddr: ":8080"
 
+# Authentication proxy (Traefik sidecar)
+auth:
+  # Enable basic auth protection via Traefik sidecar
+  enabled: false
+  # Basic auth username (ignored if htpasswd is set)
+  username: "admin"
+  # Basic auth password (will be bcrypt hashed, ignored if htpasswd is set)
+  password: ""
+  # Complete htpasswd entry (takes precedence over username/password)
+  # Generate with: htpasswd -nbB admin your-password
+  # Or: docker run --rm httpd:alpine htpasswd -nbB admin your-password
+  # Example: "admin:$2y$05$..."
+  htpasswd: ""
+  # Traefik image
+  image:
+    repository: traefik
+    tag: "v3.2"
+    pullPolicy: IfNotPresent
+  # Traefik listens on this port
+  port: 8081
+  # Resource limits for Traefik sidecar
+  resources:
+    limits:
+      cpu: 100m
+      memory: 64Mi
+    requests:
+      cpu: 50m
+      memory: 32Mi
+
 serviceAccount:
   create: true
   annotations: {}

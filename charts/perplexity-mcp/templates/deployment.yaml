@@ -56,6 +56,42 @@ spec:
           {{- toYaml .Values.readinessProbe | nindent 12 }}
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.auth.enabled }}
+      - name: traefik
+        image: "{{ .Values.auth.image.repository }}:{{ .Values.auth.image.tag }}"
+        imagePullPolicy: {{ .Values.auth.image.pullPolicy }}
+        args:
+          - --configFile=/etc/traefik/traefik.yaml
+        ports:
+        - name: auth
+          containerPort: {{ .Values.auth.port }}
+          protocol: TCP
+        volumeMounts:
+        - name: traefik-config
+          mountPath: /etc/traefik
+          readOnly: true
+        - name: auth-users
+          mountPath: /etc/traefik/users
+          subPath: users
+          readOnly: true
+        resources:
+          {{- toYaml .Values.auth.resources | nindent 12 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65532
+      volumes:
+      - name: traefik-config
+        configMap:
+          name: {{ include "perplexity-mcp.fullname" . }}-traefik
+      - name: auth-users
+        secret:
+          secretName: {{ include "perplexity-mcp.fullname" . }}-auth
+      {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

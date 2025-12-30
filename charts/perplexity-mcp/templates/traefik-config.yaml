@@ -1,0 +1,45 @@
+{{- if .Values.auth.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "perplexity-mcp.fullname" . }}-traefik
+  labels:
+    {{- include "perplexity-mcp.labels" . | nindent 4 }}
+data:
+  traefik.yaml: |
+    # Traefik static configuration
+    entryPoints:
+      web:
+        address: ":{{ .Values.auth.port }}"
+
+    providers:
+      file:
+        filename: /etc/traefik/dynamic.yaml
+
+    log:
+      level: INFO
+
+    accessLog: {}
+
+  dynamic.yaml: |
+    # Traefik dynamic configuration
+    http:
+      routers:
+        mcp:
+          rule: "PathPrefix(`/`)"
+          service: mcp-backend
+          middlewares:
+            - basic-auth
+
+      middlewares:
+        basic-auth:
+          basicAuth:
+            usersFile: "/etc/traefik/users"
+            realm: "Perplexity MCP"
+
+      services:
+        mcp-backend:
+          loadBalancer:
+            servers:
+              - url: "http://localhost:8080"
+{{- end }}

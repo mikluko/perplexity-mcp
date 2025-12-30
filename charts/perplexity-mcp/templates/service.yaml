@@ -12,7 +12,11 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
+      {{- if .Values.auth.enabled }}
+      targetPort: auth
+      {{- else }}
       targetPort: http
+      {{- end }}
       protocol: TCP
       name: http
   selector:

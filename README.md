@@ -14,6 +14,77 @@ Provides 5 Perplexity AI tools via MCP:
 
 ## Installation
 
+### Kubernetes/Helm
+
+Install via Helm for production deployments:
+
+```bash
+# Add the Helm repository (OCI-based)
+helm install perplexity-mcp oci://ghcr.io/mikluko/helm-charts/perplexity-mcp \
+  --version 0.2.1 \
+  --set perplexity.apiKey="pplx-xxxxxxxxxxxx"
+```
+
+#### With Basic Authentication
+
+Enable built-in Traefik sidecar for basic auth protection:
+
+```bash
+helm install perplexity-mcp oci://ghcr.io/mikluko/helm-charts/perplexity-mcp \
+  --set perplexity.apiKey="pplx-xxxxxxxxxxxx" \
+  --set auth.enabled=true \
+  --set auth.username=admin \
+  --set auth.password="your-secure-password"
+```
+
+Or use a pre-generated htpasswd entry (recommended for GitOps):
+
+```bash
+# Generate htpasswd entry
+HTPASSWD=$(docker run --rm httpd:alpine htpasswd -nbB admin your-password)
+
+# Install with htpasswd entry
+helm install perplexity-mcp oci://ghcr.io/mikluko/helm-charts/perplexity-mcp \
+  --set perplexity.apiKey="pplx-xxxxxxxxxxxx" \
+  --set auth.enabled=true \
+  --set-string auth.htpasswd="$HTPASSWD"
+```
+
+#### With External Secret
+
+Use an existing Kubernetes secret for the API key:
+
+```bash
+# Create secret separately
+kubectl create secret generic my-perplexity-secret \
+  --from-literal=api-key="pplx-xxxxxxxxxxxx"
+
+# Install referencing the secret
+helm install perplexity-mcp oci://ghcr.io/mikluko/helm-charts/perplexity-mcp \
+  --set perplexity.existingSecret.name=my-perplexity-secret \
+  --set perplexity.existingSecret.key=api-key
+```
+
+#### With Ingress
+
+Enable ingress for external access:
+
+```bash
+helm install perplexity-mcp oci://ghcr.io/mikluko/helm-charts/perplexity-mcp \
+  --set perplexity.apiKey="pplx-xxxxxxxxxxxx" \
+  --set auth.enabled=true \
+  --set auth.password="your-secure-password" \
+  --set ingress.enabled=true \
+  --set ingress.className=nginx \
+  --set ingress.hosts[0].host=perplexity-mcp.example.com \
+  --set ingress.hosts[0].paths[0].path=/ \
+  --set ingress.hosts[0].paths[0].pathType=Prefix
+```
+
+### Binary Installation
+
+Install locally for development or stdio mode:
+
 ```bash
 go install github.com/mikluko/perplexity-mcp@latest
 ```
@@ -108,12 +179,12 @@ For accessing a remote HTTP server, configure your MCP client with:
 }
 ```
 
-**Security Note**: When deploying the HTTP server, protect it with:
-- Network-level access controls (firewall, VPN)
-- Reverse proxy with authentication (nginx, Caddy, etc.)
-- TLS/HTTPS termination
+**Security Note**: When deploying the HTTP server:
+- For Kubernetes deployments: Use the built-in Traefik sidecar with `auth.enabled=true`
+- For standalone deployments: Protect with network-level controls (firewall, VPN) or reverse proxy authentication
+- Always use TLS/HTTPS in production
 
-The server intentionally does not include built-in authentication to allow flexible deployment patterns.
+The binary intentionally does not include built-in authentication to remain lightweight. The Helm chart provides optional basic auth via Traefik sidecar.
 
 ## Tools Reference
 

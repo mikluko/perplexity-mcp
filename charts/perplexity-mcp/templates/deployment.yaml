@@ -15,6 +15,12 @@ spec:
     metadata:
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- if .Values.proxy.enabled }}
+        checksum/config-proxy: {{ include (print $.Template.BasePath "/config-proxy.yaml") . | sha256sum }}
+        {{- if .Values.proxy.auth.enabled }}
+        checksum/secret-auth: {{ include (print $.Template.BasePath "/secret-auth.yaml") . | sha256sum }}
+        {{- end }}
+        {{- end }}
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -38,8 +44,8 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         args:
-          - -mode={{ .Values.server.mode }}
-          - -listen={{ .Values.server.listenAddr }}
+          - -mode=http
+          - -listen=0.0.0.0:{{ .Values.server.port }}
         env:
         - name: PERPLEXITY_API_KEY
           valueFrom:
@@ -48,14 +54,23 @@ spec:
               key: {{ include "perplexity-mcp.secretKey" . }}
         ports:
         - name: http
-          containerPort: 8080
+          containerPort: {{ .Values.server.port }}
           protocol: TCP
         livenessProbe:
-          {{- toYaml .Values.livenessProbe | nindent 12 }}
+          httpGet:
+            path: /health
+            port: {{ .Values.server.port }}
+          initialDelaySeconds: 10
+          periodSeconds: 10
         readinessProbe:
-          {{- toYaml .Values.readinessProbe | nindent 12 }}
+          httpGet:
+            path: /health
+            port: {{ .Values.server.port }}
+          initialDelaySeconds: 5
+          periodSeconds: 5
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.proxy.enabled }}
       - name: traefik
         image: "{{ .Values.proxy.image.repository }}:{{ .Values.proxy.image.tag }}"
         imagePullPolicy: {{ .Values.proxy.image.pullPolicy }}
@@ -90,7 +105,7 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 5
         volumeMounts:
-        - name: traefik-config
+        - name: config-proxy
           mountPath: /etc/traefik/traefik.yaml
           subPath: traefik.yaml
         {{- if .Values.proxy.auth.enabled }}
@@ -100,14 +115,17 @@ spec:
         {{- end }}
         resources:
           {{- toYaml .Values.proxy.resources | nindent 12 }}
+        {{- end }}
+      {{- if .Values.proxy.enabled }}
       volumes:
-      - name: traefik-config
-        configMap:
-          name: {{ include "perplexity-mcp.fullname" . }}-traefik
-      {{- if .Values.proxy.auth.enabled }}
-      - name: auth-users
-        secret:
-          secretName: {{ include "perplexity-mcp.fullname" . }}-auth
+        - name: config-proxy
+          configMap:
+            name: {{ include "perplexity-mcp.fullname" . }}-proxy
+        {{- if .Values.proxy.auth.enabled }}
+        - name: auth-users
+          secret:
+            secretName: {{ include "perplexity-mcp.fullname" . }}-auth
+        {{- end }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

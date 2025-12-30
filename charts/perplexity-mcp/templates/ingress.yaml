@@ -35,7 +35,7 @@ spec:
               service:
                 name: {{ include "perplexity-mcp.fullname" $ }}
                 port:
-                  number: {{ $.Values.service.port }}
+                  name: http
           {{- end }}
     {{- end }}
 {{- end }}

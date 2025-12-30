@@ -21,7 +21,7 @@
   kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
 {{- end }}
 
-2. Perplexity MCP Server is running in {{ .Values.server.mode }} mode
+2. Perplexity MCP Server is running in http mode
 
 3. The server provides 5 tools:
    - perplexity_ask: Quick web search

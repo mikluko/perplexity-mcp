@@ -23,13 +23,12 @@ perplexity:
     # Key within the secret (defaults to 'api-key')
     key: "api-key"
 
-# Server mode configuration
 server:
-  mode: http
-  listenAddr: ":8080"
+  port: 8080
 
 # Traefik proxy sidecar (always deployed for access logging)
 proxy:
+  enabled: true
   # Traefik image
   image:
     repository: traefik
@@ -111,20 +110,6 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
-
-livenessProbe:
-  httpGet:
-    path: /health
-    port: http
-  initialDelaySeconds: 10
-  periodSeconds: 30
-
-readinessProbe:
-  httpGet:
-    path: /health
-    port: http
-  initialDelaySeconds: 5
-  periodSeconds: 10
 
 autoscaling:
   enabled: false

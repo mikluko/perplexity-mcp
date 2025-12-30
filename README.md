@@ -4,13 +4,35 @@ A Model Context Protocol (MCP) server providing Perplexity AI tools for web sear
 
 ## Features
 
-Provides 5 Perplexity AI tools via MCP:
+### Tools
+
+5 Perplexity AI tools for direct API access:
 
 - **perplexity_ask** - Quick web search with citations
 - **perplexity_reason** - Step-by-step reasoning and problem solving
 - **perplexity_research_start** - Start async deep research (returns request_id)
 - **perplexity_research_result** - Check async research status
 - **perplexity_research_wait** - Blocking wait for async research completion
+
+### Prompts
+
+10 ready-to-use prompts with best practices built in:
+
+**Research**
+- **research** - Deep research with breadth-first coverage
+- **compare** - Feature comparison with tradeoffs
+- **verify** - Fact-checking with multi-perspective analysis
+- **status** - Current status with recent developments
+
+**Technical**
+- **docs** - Library documentation and examples
+- **error** - Error solutions and workarounds
+- **security** - CVE and vulnerability checks
+
+**Practical**
+- **howto** - Step-by-step procedural guides
+- **news** - Recent developments and announcements
+- **academic** - Peer-reviewed research findings
 
 ## Installation
 
@@ -253,6 +275,82 @@ Wait for async research to complete (blocking, with timeout).
 ```
 
 **Output:** Research results when completed
+
+## Prompts Reference
+
+Prompts provide ready-to-use templates with optimal prompting patterns. All prompts use minimal system instructions and put context in user messages.
+
+### research
+
+Deep research with breadth-first coverage.
+
+**Arguments:**
+- `topic` (required) - Topic to research
+- `timeframe` (optional) - Time period, defaults to "last 12 months"
+
+**Example:**
+```
+topic: "quantum computing advances"
+timeframe: "last 6 months"
+```
+
+### compare
+
+Compare two items with feature analysis.
+
+**Arguments:**
+- `item_a` (required) - First item
+- `item_b` (required) - Second item  
+- `use_case` (optional) - Specific use case context
+
+**Example:**
+```
+item_a: "PostgreSQL"
+item_b: "MySQL"
+use_case: "high-traffic web applications"
+```
+
+### verify
+
+Fact-check a claim with supporting and contradicting evidence.
+
+**Arguments:**
+- `claim` (required) - Claim to verify
+
+**Example:**
+```
+claim: "Coffee consumption reduces risk of type 2 diabetes"
+```
+
+### error
+
+Find solutions for an error message.
+
+**Arguments:**
+- `error_message` (required) - The error text
+- `technology` (required) - Technology/framework context
+
+**Example:**
+```
+error_message: "ECONNREFUSED connect ECONNREFUSED 127.0.0.1:5432"
+technology: "Node.js PostgreSQL"
+```
+
+### security
+
+Check for CVE vulnerabilities.
+
+**Arguments:**
+- `package` (required) - Package name
+- `date` (optional) - Start date (YYYY-MM-DD), defaults to 1 year ago
+
+**Example:**
+```
+package: "log4j"
+date: "2024-01-01"
+```
+
+See all 10 prompts with `mcp list-prompts` or in your MCP client's prompt selector.
 
 ## Development
 

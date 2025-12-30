@@ -18,9 +18,9 @@ func daysAgo(days int) string {
 
 // Research prompts
 
+
 var researchPrompt = &mcp.Prompt{
 	Name:        "research",
-	Title:       "Deep Research",
 	Description: "Comprehensive research with current state and key developments",
 	Arguments: []*mcp.PromptArgument{
 		{Name: "topic", Description: "Topic to research", Required: true},
@@ -47,7 +47,6 @@ func (s *Server) handleResearch(ctx context.Context, req *mcp.GetPromptRequest) 
 
 var comparePrompt = &mcp.Prompt{
 	Name:        "compare",
-	Title:       "Compare",
 	Description: "Compare two items with features and tradeoffs",
 	Arguments: []*mcp.PromptArgument{
 		{Name: "item_a", Description: "First item", Required: true},
@@ -78,7 +77,6 @@ func (s *Server) handleCompare(ctx context.Context, req *mcp.GetPromptRequest) (
 
 var verifyPrompt = &mcp.Prompt{
 	Name:        "verify",
-	Title:       "Fact-check",
 	Description: "Verify a claim with supporting and contradicting evidence",
 	Arguments: []*mcp.PromptArgument{
 		{Name: "claim", Description: "Claim to verify", Required: true},
@@ -100,7 +98,6 @@ func (s *Server) handleVerify(ctx context.Context, req *mcp.GetPromptRequest) (*
 
 var statusPrompt = &mcp.Prompt{
 	Name:        "status",
-	Title:       "Current Status",
 	Description: "Check current status and recent developments",
 	Arguments: []*mcp.PromptArgument{
 		{Name: "entity", Description: "Entity to check", Required: true},
@@ -129,7 +126,6 @@ func (s *Server) handleStatus(ctx context.Context, req *mcp.GetPromptRequest) (*
 
 var docsPrompt = &mcp.Prompt{
 	Name:        "docs",
-	Title:       "Library Documentation",
 	Description: "Find API reference and examples",
 	Arguments: []*mcp.PromptArgument{
 		{Name: "library", Description: "Library name", Required: true},
@@ -164,7 +160,6 @@ func (s *Server) handleDocs(ctx context.Context, req *mcp.GetPromptRequest) (*mc
 
 var errorPrompt = &mcp.Prompt{
 	Name:        "error",
-	Title:       "Error Lookup",
 	Description: "Find causes and solutions for an error",
 	Arguments: []*mcp.PromptArgument{
 		{Name: "error_message", Description: "Error message", Required: true},
@@ -188,7 +183,6 @@ func (s *Server) handleError(ctx context.Context, req *mcp.GetPromptRequest) (*m
 
 var securityPrompt = &mcp.Prompt{
 	Name:        "security",
-	Title:       "CVE Check",
 	Description: "Check for security vulnerabilities",
 	Arguments: []*mcp.PromptArgument{
 		{Name: "package", Description: "Package name", Required: true},
@@ -217,7 +211,6 @@ func (s *Server) handleSecurity(ctx context.Context, req *mcp.GetPromptRequest) 
 
 var howtoPrompt = &mcp.Prompt{
 	Name:        "howto",
-	Title:       "How-to",
 	Description: "Step-by-step guide for a task",
 	Arguments: []*mcp.PromptArgument{
 		{Name: "task", Description: "Task to accomplish", Required: true},
@@ -246,7 +239,6 @@ func (s *Server) handleHowto(ctx context.Context, req *mcp.GetPromptRequest) (*m
 
 var newsPrompt = &mcp.Prompt{
 	Name:        "news",
-	Title:       "Recent News",
 	Description: "Find recent news and developments",
 	Arguments: []*mcp.PromptArgument{
 		{Name: "topic", Description: "News topic", Required: true},
@@ -270,7 +262,6 @@ func (s *Server) handleNews(ctx context.Context, req *mcp.GetPromptRequest) (*mc
 
 var academicPrompt = &mcp.Prompt{
 	Name:        "academic",
-	Title:       "Academic Search",
 	Description: "Find peer-reviewed research",
 	Arguments: []*mcp.PromptArgument{
 		{Name: "topic", Description: "Research topic", Required: true},

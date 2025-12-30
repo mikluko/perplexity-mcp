@@ -8,18 +8,26 @@ metadata:
 data:
   traefik.yaml: |
     # Traefik static configuration
+    api:
+      dashboard: false
+
     entryPoints:
       web:
         address: ":{{ .Values.auth.port }}"
 
     providers:
       file:
-        filename: /etc/traefik/dynamic.yaml
+        filename: /etc/traefik/conf.d/dynamic.yaml
 
     log:
-      level: INFO
+      level: ERROR
+      format: json
 
-    accessLog: {}
+    accessLog:
+      format: json
+
+    ping:
+      entryPoint: web
 
   dynamic.yaml: |
     # Traefik dynamic configuration
@@ -41,5 +49,5 @@ data:
         mcp-backend:
           loadBalancer:
             servers:
-              - url: "http://localhost:8080"
+              - url: "http://127.0.0.1:8080"
 {{- end }}

@@ -66,35 +66,52 @@ spec:
         - name: auth
           containerPort: {{ .Values.auth.port }}
           protocol: TCP
+        readinessProbe:
+          httpGet:
+            scheme: HTTP
+            port: {{ .Values.auth.port }}
+            path: /ping
+            httpHeaders:
+              - name: Host
+                value: localhost
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            scheme: HTTP
+            port: {{ .Values.auth.port }}
+            path: /ping
+            httpHeaders:
+              - name: Host
+                value: localhost
+          initialDelaySeconds: 30
+          failureThreshold: 3
+          periodSeconds: 10
+          timeoutSeconds: 5
         volumeMounts:
         - name: traefik-config
-          mountPath: /etc/traefik
-          readOnly: true
+          mountPath: /etc/traefik/traefik.yaml
+          subPath: traefik.yaml
+        - name: traefik-confd
+          mountPath: /etc/traefik/conf.d/dynamic.yaml
+          subPath: dynamic.yaml
         - name: auth-users
           mountPath: /etc/traefik/users
           subPath: users
-          readOnly: true
-        - name: traefik-tmp
-          mountPath: /tmp
         resources:
           {{- toYaml .Values.auth.resources | nindent 12 }}
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          runAsUser: 65532
       volumes:
       - name: traefik-config
+        configMap:
+          name: {{ include "perplexity-mcp.fullname" . }}-traefik
+      - name: traefik-confd
         configMap:
           name: {{ include "perplexity-mcp.fullname" . }}-traefik
       - name: auth-users
         secret:
           secretName: {{ include "perplexity-mcp.fullname" . }}-auth
-      - name: traefik-tmp
-        emptyDir: {}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

@@ -1,0 +1,12 @@
+defaultBaseImage: cgr.dev/chainguard/static:latest
+baseImageOverrides:
+  github.com/mikluko/perplexity-mcp: cgr.dev/chainguard/static:latest
+
+builds:
+  - id: perplexity-mcp
+    main: .
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+      - -X main.version={{.Env.VERSION}}

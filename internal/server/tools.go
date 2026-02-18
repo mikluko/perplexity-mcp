@@ -37,7 +37,7 @@ type AskInput struct {
 
 var askTool = &mcp.Tool{
 	Name:        "perplexity_ask",
-	Description: "Answer a question using Perplexity AI web search. Best for quick factual lookups, simple questions, and retrieving specific information. For multi-step analysis, comparisons, or debugging use perplexity_reason instead. For comprehensive research on broad topics use perplexity_research_start instead. Only use when the answer requires current web data — do not use for questions the caller can answer from its own knowledge.",
+	Description: "Answer a question using Perplexity AI web search. Best for quick factual lookups, simple questions, and retrieving specific information. Also use as a fast sanity check to verify that facts you know from training (software versions, API status, pricing, regulations, company details) are still current. For multi-step analysis, comparisons, or debugging use perplexity_reason instead. For comprehensive research on broad topics use perplexity_research_start instead.",
 }
 
 func (s *Server) handleAsk(ctx context.Context, _ *mcp.CallToolRequest, in AskInput) (*mcp.CallToolResult, any, error) {

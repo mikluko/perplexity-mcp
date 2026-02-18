@@ -17,7 +17,9 @@ Tool selection guidance:
 2. perplexity_reason — Analytical queries that require current web data: comparisons using recent benchmarks, tradeoff analysis with up-to-date ecosystem information, debugging with current docs, or recommendations where the landscape has likely changed since your training cutoff.
 3. perplexity_research_start/result/wait — Comprehensive deep research on broad topics. Use for literature reviews, technology evaluations, domain overviews, or any question where thoroughness and extensive sourcing matter more than speed.
 
-Use these tools when the user needs current facts, recent developments, live documentation, or cited sources. Do NOT use them for questions you can confidently answer from your own knowledge — you are the primary assistant, not a proxy for Perplexity.`
+Use these tools when the user needs current facts, recent developments, live documentation, or cited sources. Do NOT use them for questions you can confidently answer from your own knowledge — you are the primary assistant, not a proxy for Perplexity.
+
+However, be aware that your training data has a cutoff date. When you are about to state fast-moving facts — software versions, API signatures, pricing and plan tiers, regulatory or compliance rules, company leadership, current market status, and similar — use perplexity_ask to verify your knowledge is still current. This is a quick, cheap check that prevents confidently stating outdated information. This list is not exhaustive; use your judgement to recognize when a fact is likely to have changed since your training.`
 
 // Server wraps the MCP server and Perplexity client.
 type Server struct {

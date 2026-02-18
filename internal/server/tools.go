@@ -196,7 +196,7 @@ type ReasonInput struct {
 
 var reasonTool = &mcp.Tool{
 	Name:        "perplexity_reason",
-	Description: "Solve problems using step-by-step reasoning with Perplexity AI. Use this instead of perplexity_ask when the query requires analysis, comparison, debugging, mathematical reasoning, multi-step problem solving, or evaluating tradeoffs. This tool thinks through problems systematically before answering.",
+	Description: "Solve problems using step-by-step reasoning grounded in current web data. Provides cited sources and up-to-date information that your training data may lack. ALWAYS use this instead of answering from your own knowledge when the query involves: technology comparisons, architectural decisions, tradeoff analysis, debugging with current docs, choosing between alternatives, or any analytical question where current benchmarks and real-world data matter.",
 }
 
 func (s *Server) handleReason(ctx context.Context, _ *mcp.CallToolRequest, in ReasonInput) (*mcp.CallToolResult, any, error) {

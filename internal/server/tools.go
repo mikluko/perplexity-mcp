@@ -11,9 +11,9 @@ import (
 )
 
 const (
-	modelAsk      = "sonar"
+	modelAsk      = "sonar-pro"
 	modelResearch = "sonar-deep-research"
-	modelReason   = "sonar-reasoning"
+	modelReason   = "sonar-reasoning-pro"
 )
 
 func textResult(text string) *mcp.CallToolResult {
@@ -89,7 +89,7 @@ var researchStartTool = &mcp.Tool{
 }
 
 func (s *Server) handleResearchStart(ctx context.Context, _ *mcp.CallToolRequest, in ResearchStartInput) (*mcp.CallToolResult, any, error) {
-	requestID, err := s.client.StartResearch(ctx, in.Query)
+	requestID, err := s.client.StartResearch(ctx, modelResearch, in.Query)
 	if err != nil {
 		return errorResult(err), nil, nil
 	}

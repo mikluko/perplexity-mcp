@@ -167,10 +167,10 @@ type AsyncRequest struct {
 	Request Request `json:"request"`
 }
 
-func (c *Client) StartResearch(ctx context.Context, query string) (string, error) {
+func (c *Client) StartResearch(ctx context.Context, model, query string) (string, error) {
 	req := AsyncRequest{
 		Request: Request{
-			Model: "sonar-deep-research",
+			Model: model,
 			Messages: []Message{
 				{
 					Role:    "system",

@@ -9,6 +9,14 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
+const serverInstructions = `This server provides three tiers of Perplexity AI tools. Choose the right tier based on query complexity:
+
+1. perplexity_ask — Quick factual lookups and simple questions. Use when you need a fast, direct answer.
+2. perplexity_reason — Analytical and multi-step problems: comparisons, debugging, tradeoff analysis, mathematical reasoning. Use when the question requires thinking through a problem, not just retrieving facts.
+3. perplexity_research_start/result/wait — Deep, comprehensive research on broad topics. Use for literature reviews, technology evaluations, domain deep-dives, or any question where thoroughness matters more than speed. Returns significantly more detailed results but takes longer.
+
+Default to perplexity_ask only for simple lookups. When in doubt between ask and reason, prefer reason. When the user needs comprehensive coverage of a topic, use research.`
+
 // Server wraps the MCP server and Perplexity client.
 type Server struct {
 	mcp    *mcp.Server
@@ -20,7 +28,9 @@ func NewServer(version, apiKey string) *Server {
 	mcpServer := mcp.NewServer(&mcp.Implementation{
 		Name:    "perplexity-mcp",
 		Version: version,
-	}, nil)
+	}, &mcp.ServerOptions{
+		Instructions: serverInstructions,
+	})
 
 	s := &Server{mcpServer, client.NewClient(apiKey)}
 

@@ -37,7 +37,7 @@ type AskInput struct {
 
 var askTool = &mcp.Tool{
 	Name:        "perplexity_ask",
-	Description: "Answer a question using Perplexity AI web search",
+	Description: "Answer a question using Perplexity AI web search. Best for quick factual lookups, simple questions, and retrieving specific information. For multi-step analysis, comparisons, or debugging use perplexity_reason instead. For comprehensive research on broad topics use perplexity_research_start instead.",
 }
 
 func (s *Server) handleAsk(ctx context.Context, _ *mcp.CallToolRequest, in AskInput) (*mcp.CallToolResult, any, error) {
@@ -85,7 +85,7 @@ type ResearchStartInput struct {
 
 var researchStartTool = &mcp.Tool{
 	Name:        "perplexity_research_start",
-	Description: "Start deep research on a topic (async). Returns request_id to check results later.",
+	Description: "Start deep research on a topic (async). Returns request_id to check results later with perplexity_research_result or perplexity_research_wait. Use this instead of perplexity_ask for broad or complex topics that benefit from comprehensive investigation: literature reviews, technology evaluations, market analysis, understanding a domain in depth, or any question where thoroughness matters more than speed. Takes longer but produces significantly more detailed and well-sourced results.",
 }
 
 func (s *Server) handleResearchStart(ctx context.Context, _ *mcp.CallToolRequest, in ResearchStartInput) (*mcp.CallToolResult, any, error) {
@@ -196,7 +196,7 @@ type ReasonInput struct {
 
 var reasonTool = &mcp.Tool{
 	Name:        "perplexity_reason",
-	Description: "Solve problems using step-by-step reasoning with Perplexity AI",
+	Description: "Solve problems using step-by-step reasoning with Perplexity AI. Use this instead of perplexity_ask when the query requires analysis, comparison, debugging, mathematical reasoning, multi-step problem solving, or evaluating tradeoffs. This tool thinks through problems systematically before answering.",
 }
 
 func (s *Server) handleReason(ctx context.Context, _ *mcp.CallToolRequest, in ReasonInput) (*mcp.CallToolResult, any, error) {

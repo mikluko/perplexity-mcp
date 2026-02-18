@@ -37,7 +37,7 @@ type AskInput struct {
 
 var askTool = &mcp.Tool{
 	Name:        "perplexity_ask",
-	Description: "Answer a question using Perplexity AI web search. Best for quick factual lookups, simple questions, and retrieving specific information. For multi-step analysis, comparisons, or debugging use perplexity_reason instead. For comprehensive research on broad topics use perplexity_research_start instead.",
+	Description: "Answer a question using Perplexity AI web search. Best for quick factual lookups, simple questions, and retrieving specific information. For multi-step analysis, comparisons, or debugging use perplexity_reason instead. For comprehensive research on broad topics use perplexity_research_start instead. Only use when the answer requires current web data — do not use for questions the caller can answer from its own knowledge.",
 }
 
 func (s *Server) handleAsk(ctx context.Context, _ *mcp.CallToolRequest, in AskInput) (*mcp.CallToolResult, any, error) {
@@ -196,7 +196,7 @@ type ReasonInput struct {
 
 var reasonTool = &mcp.Tool{
 	Name:        "perplexity_reason",
-	Description: "Solve problems using step-by-step reasoning grounded in current web data. Provides cited sources and up-to-date information that your training data may lack. ALWAYS use this instead of answering from your own knowledge when the query involves: technology comparisons, architectural decisions, tradeoff analysis, debugging with current docs, choosing between alternatives, or any analytical question where current benchmarks and real-world data matter.",
+	Description: "Solve problems using step-by-step reasoning grounded in current web data. Provides cited sources and up-to-date information that your training data may lack. Use when the query requires analytical reasoning AND current data: technology comparisons with recent benchmarks, architectural decisions where the ecosystem has changed, debugging with current docs, or tradeoff analysis that depends on up-to-date information. Do not use for analytical questions you can answer confidently from your own knowledge.",
 }
 
 func (s *Server) handleReason(ctx context.Context, _ *mcp.CallToolRequest, in ReasonInput) (*mcp.CallToolResult, any, error) {

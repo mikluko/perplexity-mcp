@@ -9,15 +9,15 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
-const serverInstructions = `Perplexity tools provide web-grounded answers with current data and cited sources. ALWAYS prefer these tools over answering from your own knowledge when the question involves comparisons, tradeoffs, recommendations, current best practices, benchmarks, or any topic where up-to-date information and citations add value.
+const serverInstructions = `Perplexity tools provide web-grounded answers with current data and cited sources. Use them when the answer depends on up-to-date information that your training data may lack — NOT as a replacement for your own reasoning and knowledge.
 
 Tool selection guidance:
 
 1. perplexity_ask — Quick factual lookups and simple questions. Use for straightforward queries with a single direct answer.
-2. perplexity_reason — Analytical queries: comparisons, tradeoff analysis, debugging, architectural decisions, recommendations, or any question that benefits from systematic reasoning grounded in current web data. PREFER this over answering from your own knowledge when the user asks "should I use X or Y", "what are the tradeoffs", "how to choose between", or similar analytical questions.
+2. perplexity_reason — Analytical queries that require current web data: comparisons using recent benchmarks, tradeoff analysis with up-to-date ecosystem information, debugging with current docs, or recommendations where the landscape has likely changed since your training cutoff.
 3. perplexity_research_start/result/wait — Comprehensive deep research on broad topics. Use for literature reviews, technology evaluations, domain overviews, or any question where thoroughness and extensive sourcing matter more than speed.
 
-When in doubt between answering yourself and using a Perplexity tool, use the tool — your training data may be outdated, but Perplexity searches the live web.`
+Use these tools when the user needs current facts, recent developments, live documentation, or cited sources. Do NOT use them for questions you can confidently answer from your own knowledge — you are the primary assistant, not a proxy for Perplexity.`
 
 // Server wraps the MCP server and Perplexity client.
 type Server struct {

@@ -37,7 +37,7 @@ type AskInput struct {
 
 var askTool = &mcp.Tool{
 	Name:        "perplexity_ask",
-	Description: "Answer a question using Perplexity AI web search. Best for quick factual lookups, simple questions, and retrieving specific information. Also use as a fast sanity check to verify that facts you know from training (software versions, API status, pricing, regulations, company details) are still current. For multi-step analysis, comparisons, or debugging use perplexity_reason instead. For comprehensive research on broad topics use perplexity_research_start instead.",
+	Description: "Answer a question using Perplexity AI web search. Best for niche/specialized queries where general web search drowns in noise (specific regulations, financial data, product specs, configuration details). Also use as a fast sanity check to verify that facts you know from training (software versions, API status, pricing, regulations, company details) are still current. For broad factual lookups on well-documented topics, prefer your built-in web search instead. For multi-step analysis or debugging use perplexity_reason. For comprehensive research on broad topics use perplexity_research_start.",
 }
 
 func (s *Server) handleAsk(ctx context.Context, _ *mcp.CallToolRequest, in AskInput) (*mcp.CallToolResult, any, error) {
@@ -196,7 +196,7 @@ type ReasonInput struct {
 
 var reasonTool = &mcp.Tool{
 	Name:        "perplexity_reason",
-	Description: "Solve problems using step-by-step reasoning grounded in current web data. Provides cited sources and up-to-date information that your training data may lack. Use when the query requires analytical reasoning AND current data: technology comparisons with recent benchmarks, architectural decisions where the ecosystem has changed, debugging with current docs, or tradeoff analysis that depends on up-to-date information. Do not use for analytical questions you can answer confidently from your own knowledge.",
+	Description: "Solve problems using step-by-step reasoning grounded in current web data. Provides cited sources and up-to-date information that your training data may lack. Use when the query requires analytical reasoning AND current data: debugging with current docs, configuration troubleshooting, or specific tradeoff analysis between named alternatives. Also a powerful fallback when your built-in web search returns inconclusive or contradictory results. More expensive in time and tokens than perplexity_ask — do not use as a default. Do not use for analytical questions you can answer confidently from your own knowledge.",
 }
 
 func (s *Server) handleReason(ctx context.Context, _ *mcp.CallToolRequest, in ReasonInput) (*mcp.CallToolResult, any, error) {

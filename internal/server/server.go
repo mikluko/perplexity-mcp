@@ -13,9 +13,17 @@ const serverInstructions = `Perplexity tools provide web-grounded answers with c
 
 Tool selection guidance:
 
-1. perplexity_ask — Quick factual lookups and simple questions. Use for straightforward queries with a single direct answer.
-2. perplexity_reason — Analytical queries that require current web data: comparisons using recent benchmarks, tradeoff analysis with up-to-date ecosystem information, debugging with current docs, or recommendations where the landscape has likely changed since your training cutoff.
-3. perplexity_research_start/result/wait — Comprehensive deep research on broad topics. Use for literature reviews, technology evaluations, domain overviews, or any question where thoroughness and extensive sourcing matter more than speed.
+1. perplexity_ask — Niche/specialized queries and fast fact verification. Excels where general web search drowns in noise: specific regulations, financial data, product specs, configuration details. Also use as a fast sanity check to verify that facts from your training data are still current.
+2. perplexity_reason — Analytical queries that require both reasoning AND current web data: debugging with current docs, configuration troubleshooting, specific tradeoff analysis between named alternatives. Also a powerful fallback when your built-in web search returns inconclusive or contradictory results on broad queries. More expensive in time and tokens — do not use as a default.
+3. perplexity_research_start/result/wait — Comprehensive deep research on broad topics. Use for literature reviews, technology evaluations, market analysis, understanding a domain in depth, or any question where thoroughness and extensive sourcing matter more than speed.
+
+Query routing — perplexity_ask vs built-in web search:
+
+perplexity_ask excels at narrow, focused queries ("How do I fix X?", "What config for Y?", specific bugs, niche regulations, product recommendations). It synthesizes scattered information into actionable answers and filters noise effectively.
+
+For broad ecosystem exploration ("Compare all X solutions", "What's the landscape of Y?") and factual lookups on well-documented topics (release notes, official docs, multi-vendor ecosystems), start with your built-in web search — it returns more sources, surfaces primary/official documentation, and discovers entire categories that perplexity_ask tends to miss. If results are inconclusive or contradictory, escalate to perplexity_reason for deeper analytical synthesis.
+
+Factual accuracy: Perplexity occasionally makes subtle factual errors in synthesized answers (e.g., claiming a feature doesn't exist when it does). When a Perplexity answer will directly influence implementation decisions, cross-check specific technical claims against primary documentation.
 
 Use these tools when the user needs current facts, recent developments, live documentation, or cited sources. Do NOT use them for questions you can confidently answer from your own knowledge — you are the primary assistant, not a proxy for Perplexity.
 
